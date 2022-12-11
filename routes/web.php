@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\beritaController;
+use App\Http\Controllers\homepageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,18 +16,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+
+
+Route::controller(homepageController::class)->group(function () {
+    Route::get('/', 'home')->name('home');
+    Route::get('/berita', 'berita')->name('berita');
+    Route::get('/berita/{id}', 'tampilberita')->name('tampilberita');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::controller(beritaController::class)->group(function () {
+        Route::get("/dashboard", 'berita')->name('dashboard');
+        Route::get("/tambahberita", 'tambah_berita')->name('tambahberita');
+        Route::post('/tambahberita', 'tambah_berita_proccess')->name('tambah_berita_process');
+
+        Route::get("/updateberita/{id}", 'edit_berita')->name('editberita');
+        Route::put("/updateberita/{id}/{image}", 'edit_berita_proccess')->name('edit_berita_process');
+
+        Route::get('/hapusberita/{id_berita}', 'hapus_berita')->name('hapusberita');
+
+        Route::get('/detailberita/{id}', 'detail_berita')->name('detailberita');
+    });
+
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('/profile', 'edit')->name('profile.edit');
+        Route::patch('/profile', 'update')->name('profile.update');
+        Route::delete('/profile', 'destroy')->name('profile.destroy');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

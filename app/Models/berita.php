@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class berita extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'id_berita';
+
+    protected $fillable = [
+        'judul',
+        'image',
+        'headline',
+        'isi',
+        'pengirim'
+    ];
 }

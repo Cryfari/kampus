@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('beritas', function (Blueprint $table) {
             $table->id('id_berita');
             $table->string('judul',100);
-            $table->string('heeadline', 100);
-            $table->text('isi');
+            $table->string('image');
+            $table->string('headline', 100);
+            $table->longtext('isi');
             $table->string('pengirim');
             $table->timestamps();
         });
